@@ -49,6 +49,7 @@ angular.module("omniServices")
                         nonce: self.nonce,
                         public_key: self.asymKey.pubPem,
                         uuid: self.uuid,
+                        referid: form.referid,
                         wallet: encryptedWallet
                       };
 

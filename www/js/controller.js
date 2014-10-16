@@ -202,16 +202,16 @@ function Ctrl($scope, $route, $routeParams, $modal, $location, browser, Account)
 
 }
 
-function RefIdCreateController($scope, $modal, $location) {
+function ReferIdCreateController($scope, $modal, $location) {
   $scope.open = function() {
-    $scope.refid = $location.path().replace("/create/", "");
+    $scope.referid = $location.path().replace("/create/", "");
 
     $modal.open({
       templateUrl: '/partials/wallet_create_modal.html',
-      controller: CreateWalletController,
+      controller: CreateWalletControllerReferId,
       resolve: {
-        refid: function() {
-          return $scope.refid;
+        referid: function() {
+          return $scope.referid;
         }
       }
     });

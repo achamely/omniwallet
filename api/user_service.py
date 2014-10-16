@@ -17,6 +17,7 @@ from email import Encoders
 from sqltools import *
 from recaptcha.client import captcha
 import config 
+import re
 
 ACCOUNT_CREATION_DIFFICULTY = '0400'
 LOGIN_DIFFICULTY = '0400'
@@ -100,6 +101,8 @@ def create():
   nonce = request.form['nonce']
   public_key = request.form['public_key'].encode('UTF-8')
   wallet = request.form['wallet']
+  referid = request.form['referid']
+  referid = re.sub(r'\W+', '', referid) #check alphanumeric
 
   if config.LOCALDEVBYPASSDB:
     session_pow_challenge = session + "_pow_challenge"
@@ -137,7 +140,7 @@ def create():
       print 'UUID already exists'
       abort(403)
 
-    write_wallet(uuid, wallet, email)
+    write_wallet(uuid, wallet, email, referid)
     dbExecute("update sessions set pchallenge=NULL, timestamp=DEFAULT, pubkey=%s where sessionid=%s",(public_key, session))
     dbCommit()
 
@@ -269,15 +272,15 @@ def failed_challenge(pow_challenge, nonce, difficulty):
   pow_challenge_response = ws.hashlib.sha256(pow_challenge + nonce).hexdigest()
   return pow_challenge_response[-len(difficulty):] != difficulty
 
-def write_wallet(uuid, wallet, email=None):
+def write_wallet(uuid, wallet, email=None, referid=None):
   if config.LOCALDEVBYPASSDB:
     filename = data_dir_root + '/wallets/' + uuid + '.json'
     with open(filename, 'w') as f:
       f.write(wallet)
   else:
     dbExecute("with upsert as (update wallets set walletblob=%s where walletid=%s returning *) "
-              "insert into wallets (walletblob,walletid,email) select %s,%s,%s where not exists (select * from upsert)", 
-              (wallet,uuid,wallet,uuid,email))
+              "insert into wallets (walletblob,walletid,email,referid) select %s,%s,%s,%s where not exists (select * from upsert)", 
+              (wallet,uuid,wallet,uuid,email,referid))
     dbCommit()
     
 def read_wallet(uuid):

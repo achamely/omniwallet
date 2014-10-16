@@ -1,6 +1,16 @@
+function CreateWalletControllerReferId($scope, $location, $modalInstance, Account, AddressManager, referid) {
+
+  $scope.create = { 
+    referid: referid
+  }
+
+  CreateWalletController($scope, $location, $modalInstance, Account, AddressManager);
+}
+
+
 function CreateWalletController($scope, $location, $modalInstance, Account, AddressManager) {
   $scope.dismiss = $modalInstance.dismiss;
-  
+
   $scope.createWallet = function(create) {
     $scope.validating=true;
     $scope.serverError = $scope.invalidCaptcha =false;

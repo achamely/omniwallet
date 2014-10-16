@@ -126,9 +126,9 @@ var app = angular.module('omniwallet', [
     }).when('/loginfs/:uuid', {
       template: '<div ng-controller="FailedSaveLoginController" ng-init="open()"></div>',
       controller: FailedSaveLoginController
-    }).when('/create/:refid', {
-      template: '<div ng-controller="RefIdCreateController" ng-init="open()"></div>',
-      controller: RefIdCreateController
+    }).when('/create/:referid', {
+      template: '<div ng-controller="ReferIdCreateController" ng-init="open()"></div>',
+      controller: ReferIdCreateController
     }).when('/import', {
       templateUrl: '/partials/wallet_import.html',
     }).when('/status', {
