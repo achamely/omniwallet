@@ -202,6 +202,23 @@ function Ctrl($scope, $route, $routeParams, $modal, $location, browser, Account)
 
 }
 
+function RefIdCreateController($scope, $modal, $location) {
+  $scope.open = function() {
+    $scope.refid = $location.path().replace("/create/", "");
+
+    $modal.open({
+      templateUrl: '/partials/wallet_create_modal.html',
+      controller: CreateWalletController,
+      resolve: {
+        refid: function() {
+          return $scope.refid;
+        }
+      }
+    });
+  }
+}
+
+
 function HiddenLoginController($scope, $modal, $location) {
   $scope.open = function() {
     $scope.uuid = $location.path().replace("/login/", "");
@@ -255,10 +272,10 @@ function NavigationController($scope, $http, $modal, Account) {
     if (!$scope.modalOpened) {
       $scope.modalOpened = true;
       var modalInstance = $modal.open({
-      templateUrl: '/partials/wallet_create_modal.html',
-      controller: CreateWalletController,
-      backdrop:'static'
-      });
+        templateUrl: '/partials/wallet_create_modal.html',
+        controller: CreateWalletController,
+        backdrop:'static'
+        });
       modalInstance.result.then(
       function(){
         // reset modal status when wallet created successfully
